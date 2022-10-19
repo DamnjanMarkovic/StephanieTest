@@ -215,7 +215,7 @@ namespace Stephanie
             List<Parameter> oParamList = new List<Parameter>();
 
             // add data values retrieved from the device
-            oParamList.AddRange(ProcessData());
+            //oParamList.AddRange(ProcessData());
             // +++ currently not using alarm cause of documentation-reality mismatch!!!
             // add alarms data retrieved from the device
             //oParamList.AddRange(ProcessAlarms());
@@ -362,7 +362,6 @@ namespace Stephanie
             {
                 byte[] dataResponse =
                         {
-                    //original
                             0x00, 0x02, 0x25, 0x31,
                             0x01, 0xc7, 0x00,
                             0x02, 0x3f, 0x01,
@@ -377,21 +376,6 @@ namespace Stephanie
                             0x0b, 0x00, 0x00,
                             0x0c, 0x00, 0x00,
                             0x78, 0xd5
-                    //changed for testing
-                    //0x00, 0x02, 0x25, 0x31,
-                    //        0x01, 0xc7, 0x00,
-                    //        0x02, 0x3f, 0x00,
-                    //        0x03, 0x5a, 0x00,
-                    //        0x04, 0x27, 0x00,
-                    //        0x05, 0x02, 0x00,
-                    //        0x06, 0x00, 0x00,
-                    //        0x07, 0x58, 0x02,
-                    //        0x08, 0x90, 0x01,
-                    //        0x09, 0xd2, 0x00,
-                    //        0x0a, 0xd5, 0x00,
-                    //        0x0b, 0x00, 0x00,
-                    //        0x0c, 0x00, 0x00,
-                    //        0x51, 0x5B
                         };
                 byBuffer = dataResponse;
             }
@@ -412,22 +396,12 @@ namespace Stephanie
             {
                 byte[] settingsResponse =
                     {
-                            //// sa dva parametra
-                            //0x00, 0x00, 0x0D, 0x34,
-                            //0x20, 0x01, 0x00,
-                            //0x21, 0x02, 0x00,
-                            //0x22, 0x01, 0x00,
-                            //0x23, 0x03, 0x00,
-                            //0x92, 0xB8
-
-                            //sa jednim parametrom
                             0x00, 0x00, 0x0A, 0x34,
                             0x20, 0x01,
-                            0x21, 0x02, 0x00,           //33, 2,0
+                            0x21, 0x02, 0x00,
                             0x22, 0x01,
                             0x23, 0x01,
                             0xE9, 0x11
-                            //0x43, 0x14
                     };
                 byBuffer = settingsResponse;
             }
