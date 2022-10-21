@@ -86,6 +86,17 @@ namespace StephanieUnitTests
         [TestMethod]
         public void TestValuesRunningProtocol1_3()
         {
+            byte[] gerateHersteller = { 0x46, 0x72, 0x69, 0x74, 0x7a, 0x20, 0x53, 0x74, 0x65, 0x70, 0x68, 0x61, 0x6e, 0x20, 0x47, 0x6d, 0x62, 0x48 };
+            
+            //Encoder byte in hex to string
+            //string byteArrayToString = Encoding.UTF8.GetString(fritzStephanGMBHBytes);
+
+            var lengthAsHexGerateHersteller = gerateHersteller.Length.ToString("X");
+
+            byte[] gerateModel = { 0x53, 0x74, 0x65, 0x70, 0x68, 0x61, 0x6e, 0x69, 0x65 };
+            var lengthAsHexGerateModel = gerateModel.Length.ToString("X");
+
+
             byte[] dataResponse =
                {
                     0x00, 0x02, 0x25, 0x31, 0x01, 0xc7, 0x00, 0x02,
