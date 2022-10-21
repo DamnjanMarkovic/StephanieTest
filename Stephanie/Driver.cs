@@ -224,10 +224,70 @@ namespace Stephanie
 
 
             // add Device settings values retrieved from the device
-            oParamList.AddRange(ProcessDeviceSettings());
+            //oParamList.AddRange(ProcessDeviceSettings());
+
+            // add Breathing Gas settings values retrieved from the device
+            //oParamList.AddRange(ProcessBreathingGasSettings());
+
+            // add Breathing Gas Measured Values values retrieved from the device
+            //oParamList.AddRange(ProcessBreathingGasMeasuredValues());
+
+            // add Blood Gas Measured Values values retrieved from the device
+            oParamList.AddRange(ProcessBloodGasMeasuredValues());
 
             // write all data to the lazy writer
             WriteToLazyWriter(oParamList);
+        }
+
+        // Breathing Gas Measured Values
+        //  Description:    Communicates with the device to get data values and then parses it.
+        //
+        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
+
+        private IEnumerable<Parameter> ProcessBloodGasMeasuredValues()
+        {
+            // Create a request packet and send it to the device
+            var byData = GetRawDataFromDevice(new BloodGasMeasuredValuesRequestPacket());
+
+            // Create a response packet from the data arrived from the device
+            var oBloodGasMeasuredValuesResponsePacket = new BloodGasMeasuredValuesResponsePacket(byData);
+
+            // Returning the data as a list of parameters (parsed)
+            return oBloodGasMeasuredValuesResponsePacket.GetParsedData();
+        }
+
+        // Breathing Gas Measured Values
+        //  Description:    Communicates with the device to get data values and then parses it.
+        //
+        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
+
+        private IEnumerable<Parameter> ProcessBreathingGasMeasuredValues()
+        {
+            // Create a request packet and send it to the device
+            var byData = GetRawDataFromDevice(new BreathingGasMeasuredValuesRequestPacket());
+
+            // Create a response packet from the data arrived from the device
+            var oBreathingGasMeasuredValuesResponsePacket = new BreathingGasMeasuredValuesResponsePacket(byData);
+
+            // Returning the data as a list of parameters (parsed)
+            return oBreathingGasMeasuredValuesResponsePacket.GetParsedData();
+        }
+
+        // Breathing Gas Settings
+        //  Description:    Communicates with the device to get data values and then parses it.
+        //
+        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
+
+        private IEnumerable<Parameter> ProcessBreathingGasSettings()
+        {
+            // Create a request packet and send it to the device
+            var byData = GetRawDataFromDevice(new BreathingGasSettingsRequestPacket());
+
+            // Create a response packet from the data arrived from the device
+            var oBreathingGasSettingsResponsePacket = new BreathingGasSettingsResponsePacket(byData);
+
+            // Returning the data as a list of parameters (parsed)
+            return oBreathingGasSettingsResponsePacket.GetParsedData();
         }
 
         // ProcessData
@@ -405,6 +465,59 @@ namespace Stephanie
                     };
                 byBuffer = settingsResponse;
             }
+            else if (oRequestPacket.m_RequestCommand == "GET5")
+            {
+                byte[] settingsResponse =
+                    {
+                            0x00, 0x00, 0x0B, 0x35,
+                            0x31, 0x01,
+                            0x32, 0x02,
+                            0x33, 0x01,
+                            0x34, 0x03,
+                            0x35, 0x01,
+                            0x2E, 0xF6
+                    };
+                byBuffer = settingsResponse;
+            }
+            else if (oRequestPacket.m_RequestCommand == "GET6")
+            {
+                byte[] settingsResponse =
+                    {
+                            0x00, 0x00, 0x1F, 0x36,
+                            0x60, 0x01, 0x00,
+                            0x61, 0x02, 0x01,
+                            0x62, 0x03, 0x00,
+                            0x63, 0x01, 0x00,
+                            0x64, 0x02, 0x00,
+                            0x65, 0x03, 0x00,
+                            0x66, 0x01, 0x02,
+                            0x67, 0x02, 0x01,
+                            0x68, 0x03, 0x00,
+                            0x69, 0x02, 0x00,
+                            0x48, 0xEB
+                    };
+                byBuffer = settingsResponse;
+            }
+            else if (oRequestPacket.m_RequestCommand == "GET7")
+            {
+                byte[] settingsResponse =
+                    {
+                            0x00, 0x00, 0x1F, 0x37,
+                            0x70, 0x01, 0x00,
+                            0x71, 0x02, 0x01,
+                            0x72, 0x03, 0x00,
+                            0x73, 0x01, 0x00,
+                            0x74, 0x02, 0x00,
+                            0x75, 0x02, 0x00,
+                            0x76, 0x01, 0x02,
+                            0x77, 0x02, 0x01,
+                            0x78, 0x01, 0x00,
+                            0x79, 0x02, 0x00,
+                            0x90, 0xC2
+                    };
+                byBuffer = settingsResponse;
+            }
+
 
 
             //HelperObject.DebugTrace("Sending: " + Encoding.ASCII.GetString(byBuffer));

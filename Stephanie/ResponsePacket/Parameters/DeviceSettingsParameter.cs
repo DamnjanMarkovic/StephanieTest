@@ -22,7 +22,6 @@ namespace Stephanie
         protected override bool AssignAndValidateValue(short value)
         {
             //  Set Description, using Name and PDF values:
-            //  This could be in some XML
             //  I don't know if this should be set here or is something else reading the values and 'converting' them to strings
 
             switch (this.Name)
@@ -42,8 +41,8 @@ namespace Stephanie
                 default:
                     break;
             }
-
-            m_Value = value.ToString();
+            // Calculating the real value for this parameter
+            m_Value = ((float)value / m_Divider).ToString();
             return true;
         }
 

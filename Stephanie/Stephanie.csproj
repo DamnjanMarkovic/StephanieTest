@@ -114,15 +114,24 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RequestPacket\AlarmRequestPacket.cs" />
+    <Compile Include="RequestPacket\BloodGasMeasuredValuesRequestPacket.cs" />
+    <Compile Include="RequestPacket\BreathingGasMeasuredValuesRequestPacket.cs" />
+    <Compile Include="RequestPacket\BreathingGasSettingsRequestPacket.cs" />
     <Compile Include="RequestPacket\DataRequestPacket.cs" />
     <Compile Include="RequestPacket\DeviceSettingsRequestPacket.cs" />
     <Compile Include="RequestPacket\RequestCommands.cs" />
     <Compile Include="RequestPacket\RequestPacket.cs" />
     <Compile Include="RequestPacket\SettingsRequestPacket.cs" />
     <Compile Include="ResponsePacket\AlarmResponsePacket.cs" />
+    <Compile Include="ResponsePacket\BloodGasMeasuredValuesResponsePacket.cs" />
+    <Compile Include="ResponsePacket\BreathingGasMeasuredValuesResponsePacket.cs" />
+    <Compile Include="ResponsePacket\BreathingGasSettingsResponsePacket.cs" />
     <Compile Include="ResponsePacket\DataResponsePacket.cs" />
     <Compile Include="ResponsePacket\DeviceSettingResponsePacket.cs" />
     <Compile Include="ResponsePacket\Parameters\AlarmParameter.cs" />
+    <Compile Include="ResponsePacket\Parameters\BloodGasMeasuredValuesParametar.cs" />
+    <Compile Include="ResponsePacket\Parameters\BreathingGasMeasuredValuesParametar.cs" />
+    <Compile Include="ResponsePacket\Parameters\BreathingGasSettingsParametar.cs" />
     <Compile Include="ResponsePacket\Parameters\DataParameter.cs" />
     <Compile Include="ResponsePacket\Parameters\DeviceSettingsParameter.cs" />
     <Compile Include="ResponsePacket\Parameters\Parameter.cs" />
