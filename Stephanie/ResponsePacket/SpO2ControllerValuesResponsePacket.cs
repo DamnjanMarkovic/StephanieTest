@@ -1,23 +1,20 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Stephanie
 {
-    // class BloodGasMeasuredValuesResponsePacket
+    // class SpO2ControllerValuesResponsePacket
     //  Description:    this class is used to represent and parse a setting packet which has been received from the device
-    internal class BloodGasMeasuredValuesResponsePacket : ResponsePacket
+    internal class SpO2ControllerValuesResponsePacket : ResponsePacket
     {
         #region Constants
 
-        protected const byte SETTING_MESSAGE_ID = 0x37;
+        protected const byte SETTING_MESSAGE_ID = 0x43;
 
         #endregion
 
         #region Constructors
 
-        public BloodGasMeasuredValuesResponsePacket(byte[] byData)
+        public SpO2ControllerValuesResponsePacket(byte[] byData)
             : base(byData)
         { }
 
@@ -29,9 +26,9 @@ namespace Stephanie
         {
             List<Parameter> oParamList = new List<Parameter>();
 
-            for (int i = 0; i < Data.Length; i += 3)
+            for (int i = 0; i < Data.Length; i += 2)
             {
-                oParamList.Add(new BloodGasMeasuredValuesParametar(Data, i));
+                oParamList.Add(new SpO2ControllerValuesParametar(Data[i], (short)(Data[i + 1])));                
             }
 
             return oParamList;

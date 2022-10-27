@@ -6,7 +6,7 @@ using System.Text;
 
 using Microsoft.Win32;
 
-//using MVBSLib;
+using MVBSLib;
 
 using Stephanie.Helpers;
 using Stephanie.RequestPacket;
@@ -74,11 +74,11 @@ namespace Stephanie
         //    get { return m_oOutComm; }
         //}
 
-        //protected IHelperObject m_oHelperObject;
-        //public IHelperObject HelperObject
-        //{
-        //    get { return m_oHelperObject; }
-        //}
+        protected IHelperObject m_oHelperObject;
+        public IHelperObject HelperObject
+        {
+            get { return m_oHelperObject; }
+        }
 
         #endregion
 
@@ -91,7 +91,7 @@ namespace Stephanie
         public object Execute(object Param)
         {
             try
-            {
+            {                
                 ProcessMessages();
             }
             catch (Exception ex)
@@ -103,11 +103,11 @@ namespace Stephanie
             return null;
         }
 
-        //public void Initialize(IHelperObject pHelperObject)
-        //{
-        //    m_oHelperObject = pHelperObject;
-        //    InitPoolSettings();
-        //}
+        public void Initialize(IHelperObject pHelperObject)
+        {
+            m_oHelperObject = pHelperObject;
+            //InitPoolSettings();
+        }
 
         public virtual void InitPoolSettings ()
         {
@@ -233,17 +233,51 @@ namespace Stephanie
             //oParamList.AddRange(ProcessBreathingGasMeasuredValues());
 
             // add Blood Gas Measured Values values retrieved from the device
-            oParamList.AddRange(ProcessBloodGasMeasuredValues());
+            //oParamList.AddRange(ProcessBloodGasMeasuredValues());
+
+            // add Device Information values retrieved from the device
+            //oParamList.AddRange(ProcessDeviceInformation());
+
+            // add SpO2 Controller Values retrieved from the device
+            oParamList.AddRange(ProcessSpO2ControllerValues());
 
             // write all data to the lazy writer
             WriteToLazyWriter(oParamList);
         }
 
-        // Breathing Gas Measured Values
+
+
         //  Description:    Communicates with the device to get data values and then parses it.
-        //
         //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
 
+        //  SpO2 Controller Values
+        private IEnumerable<Parameter> ProcessSpO2ControllerValues()
+        {
+            // Create a request packet and send it to the device
+            var byData = GetRawDataFromDevice(new SpO2ControllerValuesRequestPacket());
+
+            // Create a response packet from the data arrived from the device
+            var oSpO2ControllerValuesResponsePacket = new SpO2ControllerValuesResponsePacket(byData);
+
+            // Returning the data as a list of parameters (parsed)
+            return oSpO2ControllerValuesResponsePacket.GetParsedData();
+        }
+
+
+        // Device Information
+        private IEnumerable<Parameter> ProcessDeviceInformation()
+        {
+            // Create a request packet and send it to the device
+            var byData = GetRawDataFromDevice(new DeviceInformationRequestPacket());
+
+            // Create a response packet from the data arrived from the device
+            var oDeviceInformationResponsePacket = new DeviceInformationResponsePacket(byData);
+
+            // Returning the data as a list of parameters (parsed)
+            return oDeviceInformationResponsePacket.GetParsedData();
+        }
+
+        // BloodGas Measured Values
         private IEnumerable<Parameter> ProcessBloodGasMeasuredValues()
         {
             // Create a request packet and send it to the device
@@ -255,12 +289,7 @@ namespace Stephanie
             // Returning the data as a list of parameters (parsed)
             return oBloodGasMeasuredValuesResponsePacket.GetParsedData();
         }
-
         // Breathing Gas Measured Values
-        //  Description:    Communicates with the device to get data values and then parses it.
-        //
-        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
-
         private IEnumerable<Parameter> ProcessBreathingGasMeasuredValues()
         {
             // Create a request packet and send it to the device
@@ -272,12 +301,7 @@ namespace Stephanie
             // Returning the data as a list of parameters (parsed)
             return oBreathingGasMeasuredValuesResponsePacket.GetParsedData();
         }
-
         // Breathing Gas Settings
-        //  Description:    Communicates with the device to get data values and then parses it.
-        //
-        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
-
         private IEnumerable<Parameter> ProcessBreathingGasSettings()
         {
             // Create a request packet and send it to the device
@@ -289,11 +313,7 @@ namespace Stephanie
             // Returning the data as a list of parameters (parsed)
             return oBreathingGasSettingsResponsePacket.GetParsedData();
         }
-
         // ProcessData
-        //  Description:    Communicates with the device to get data values and then parses it.
-        //
-        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
         protected List<Parameter> ProcessData()
         {
             // Create a request packet and send it to the device
@@ -305,11 +325,7 @@ namespace Stephanie
             // Returning the data as a list of parameters (parsed)
             return oDataResponsePacket.GetParsedData();
         }
-
         // ProcessAlarms
-        //  Description:    Communicates with the device to get alarms data and then parses it.
-        //
-        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
         protected List<Parameter> ProcessAlarms()
         {
             // Create a request packet and send it to the device
@@ -321,11 +337,7 @@ namespace Stephanie
             // Returning the data as a list of parameters (parsed)
             return oAlarmResponsePacket.GetParsedData();
         }
-
         // ProcessSettings
-        //  Description:    Communicates with the device to get settings data and then parses it.
-        //
-        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
         protected List<Parameter> ProcessSettings()
         {
             // Create a request packet and send it to the device
@@ -339,9 +351,6 @@ namespace Stephanie
         }
 
         // ProcessDeviceSettings
-        //  Description:    Communicates with the device to get device settings data and then parses it.
-        //
-        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device settings.
         protected List<Parameter> ProcessDeviceSettings()
         {
             // Create a request packet and send it to the device
@@ -366,7 +375,7 @@ namespace Stephanie
             if (IsInStandByMode(oParamList))
             {
                 //LazyWriter.WriteSignalEx(SET_MODESWITCH, "0");
-                //HelperObject.WriteToLog("The Device is in StandBy mode.");
+                HelperObject.WriteToLog("The Device is in StandBy mode.");
                 return;
             }
 
@@ -381,12 +390,18 @@ namespace Stephanie
                     {
                         // If a description is available write it as well
                         //LazyWriter.WriteDescription(oParam.Name, oParam.Description);
+
+                        //added for testing on the machine
+                        //this doesn't work here (dll MVBSLib not working properly)
+#if DEBUG
+                        //HelperObject.WriteToLog($"Param Name: {oParam.Name}, Param Desc: {oParam.Description}");
+#endif
                     }
                 }
                 else
                 {
                     // Write to log to indicate that this parameter was reported invalid by the device.
-                    //HelperObject.DebugTrace(string.Format(INDALID_PARAM_MSG, oParam.Name));
+                    HelperObject.DebugTrace(string.Format(INDALID_PARAM_MSG, oParam.Name));
                 }
             }
         }
@@ -420,7 +435,7 @@ namespace Stephanie
             
             if (oRequestPacket.m_RequestCommand == "GET1")
             {
-                byte[] dataResponse =
+                byte[] response =
                         {
                             0x00, 0x02, 0x25, 0x31,
                             0x01, 0xc7, 0x00,
@@ -437,11 +452,11 @@ namespace Stephanie
                             0x0c, 0x00, 0x00,
                             0x78, 0xd5
                         };
-                byBuffer = dataResponse;
+                byBuffer = response;
             }
             else if (oRequestPacket.m_RequestCommand == "GET3")
             {
-                byte[] settingsResponse =
+                byte[] response =
                     {
                     0x00, 0x02, 0x2b, 0x33, 0x12, 0x7c, 0x01, 0x13,
                     0xff, 0xff, 0x14, 0xff, 0xff, 0x15, 0x64, 0x00,
@@ -450,11 +465,11 @@ namespace Stephanie
                     0x0c, 0x00, 0x1c, 0xd2, 0x00, 0x1d, 0x14, 0x00,
                     0x40, 0x43, 0x00, 0x43, 0x01, 0x00, 0x56, 0xa0
                     };
-                byBuffer = settingsResponse;
+                byBuffer = response;
             }
             else if (oRequestPacket.m_RequestCommand == "GET4")
             {
-                byte[] settingsResponse =
+                byte[] response =
                     {
                             0x00, 0x00, 0x0A, 0x34,
                             0x20, 0x01,
@@ -463,11 +478,11 @@ namespace Stephanie
                             0x23, 0x01,
                             0xE9, 0x11
                     };
-                byBuffer = settingsResponse;
+                byBuffer = response;
             }
             else if (oRequestPacket.m_RequestCommand == "GET5")
             {
-                byte[] settingsResponse =
+                byte[] response =
                     {
                             0x00, 0x00, 0x0B, 0x35,
                             0x31, 0x01,
@@ -477,11 +492,11 @@ namespace Stephanie
                             0x35, 0x01,
                             0x2E, 0xF6
                     };
-                byBuffer = settingsResponse;
+                byBuffer = response;
             }
             else if (oRequestPacket.m_RequestCommand == "GET6")
             {
-                byte[] settingsResponse =
+                byte[] response =
                     {
                             0x00, 0x00, 0x1F, 0x36,
                             0x60, 0x01, 0x00,
@@ -496,11 +511,11 @@ namespace Stephanie
                             0x69, 0x02, 0x00,
                             0x48, 0xEB
                     };
-                byBuffer = settingsResponse;
+                byBuffer = response;
             }
             else if (oRequestPacket.m_RequestCommand == "GET7")
             {
-                byte[] settingsResponse =
+                byte[] response =
                     {
                             0x00, 0x00, 0x1F, 0x37,
                             0x70, 0x01, 0x00,
@@ -515,11 +530,57 @@ namespace Stephanie
                             0x79, 0x02, 0x00,
                             0x90, 0xC2
                     };
-                byBuffer = settingsResponse;
+                byBuffer = response;
             }
-
-
-
+            else if (oRequestPacket.m_RequestCommand == "GET8")
+            {
+                byte[] response =
+                    {
+                            //Total: 55 + 1 
+                            0x00, 0x00, 0x3E, 0x38,
+                            //PDMS Version: 4 (2)
+                            0x80, 0x04,
+                            //  One byte for the length and then Geräte-Hersteller: Fritz Stephan GmbH (19)
+                            0x81, 0x13, 0x46, 0x72, 0x69, 0x74, 0x7a, 0x20, 0x53, 0x74, 0x65, 0x70, 0x68, 0x61, 0x6e, 0x20, 0x47, 0x6d, 0x62, 0x48, 0x20,
+                            //  One byte for the length and then Gerätemodell: Stephanie (9)
+                            0x82, 0x09, 0x53, 0x74, 0x65, 0x70, 0x68, 0x61, 0x6e, 0x69, 0x65,
+                            //  One byte for the length and then Geräte-UDI: EVE (3)
+                            0x83, 0x03, 0x45, 0x56, 0x45,
+                            //  One byte for the length and then Seriennummer des Geräts: 123456 (6)
+                            0x84, 0x06, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36,
+                            //  One byte for the length and then Software-Version des Geräts: 654321 (6)
+                            0x85, 0x06, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 
+                            //  Spracheinstellung: de (2)
+                            0x86, 0x64, 0x65,
+                            //Pressure Unit: mbar (1)
+                            0x87, 0x02, 0X00,
+                            0x36, 0xEC
+                    };
+                byBuffer = response;
+            }
+            else if (oRequestPacket.m_RequestCommand == "GETC")
+            {
+                byte[] response =
+                    {
+                            0x00, 0x00, 0x1D, 0x43,
+                            0xC0, 0x01,
+                            0xC1, 0x01,
+                            0xC2, 0x01,
+                            0xC3, 0x01,
+                            0xC4, 0x01,
+                            0xC5, 0x02,
+                            0xC6, 0x01,
+                            0xC7, 0x01,
+                            0xC8, 0x01,
+                            0xC9, 0x02,
+                            0xCA, 0x01,
+                            0xCB, 0x01,
+                            0xCC, 0x02,
+                            0xCD, 0x03,
+                            0xBF, 0x0F
+                    };
+                byBuffer = response;
+            }
             //HelperObject.DebugTrace("Sending: " + Encoding.ASCII.GetString(byBuffer));
 
             o = byBuffer;
@@ -569,6 +630,16 @@ namespace Stephanie
             // Writing the packet content to the dump file.
             File.WriteAllBytes(DumpFileFullPath, byData);
         }
+
+
+        #endregion
+
+
+        #region added for Testing 
+
+        #region Logging
+
+        #endregion
 
 
         #endregion

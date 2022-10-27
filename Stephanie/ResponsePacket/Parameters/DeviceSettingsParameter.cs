@@ -22,7 +22,6 @@ namespace Stephanie
         protected override bool AssignAndValidateValue(short value)
         {
             //  Set Description, using Name and PDF values:
-            //  I don't know if this should be set here or is something else reading the values and 'converting' them to strings
 
             switch (this.Name)
             {
@@ -50,119 +49,83 @@ namespace Stephanie
         #region Set description based on values 
         private string SetTriggerSourceDescription(short value)
         {
-            var desc = string.Empty;
-
             switch (value)
             {
                 case 0:
-                    desc = "Inactive / No Trigger";
-                    break;
+                    return "Inactive / No Trigger";
                 case 1:
-                    desc = "Pressure-";
-                    break;
+                    return "Pressure-";
                 case 2:
-                    desc = "Flow-";
-                    break;
+                    return "Flow-";
                 case 3:
-                    desc = "External Trigger";
-                    break;
+                    return "External Trigger";
                 default:
-                    break;
+                    return string.Empty;
             }
-            return desc;
         }
         private string SetRespiratorySupplementDescription(short value)
         {
-            var desc = string.Empty;
-
             switch (value)
             {
                 case 0:
-                    desc = "NONE";
-                    break;
+                    return "NONE";
                 case 1:
-                    desc = "HFO";
-                    break;
+                    return "HFO";
                 case 2:
-                    desc = "PAV (NVI) ";
-                    break;
+                    return "PAV (NVI) ";
                 case 4:
-                    desc = "PVI";
-                    break;
+                    return "PVI";
                 case 8:
-                    desc = "APNCTRL (Apnoe control)";
-                    break;
+                    return "APNCTRL (Apnoe control)";
                 case 16:
-                    desc = "VLIM (Volume limit)";
-                    break;
+                    return "VLIM (Volume limit)";
                 case 32:
-                    desc = "VG (PRVC)";
-                    break;
+                    return "VG (PRVC)";
                 case 64:
-                    desc = "Backup (STDBU)";
-                    break;
+                    return "Backup (STDBU)";
                 case 128:
-                    desc = "PSV";
-                    break;
+                    return "PSV";
                 case 256:
-                    desc = "BBRK (Break)";
-                    break;
+                    return "BBRK (Break)";
                 case 512:
-                    desc = "NIV (non invasive)";
-                    break;
+                    return "NIV (non invasive)";
                 case 1024:
-                    desc = "TC";
-                    break;
+                    return "TC";
                 case 2048:
-                    desc = "Leakage Compensation ";
-                    break;
+                    return "Leakage Compensation ";
                 case 4096:
-                    desc = "Measure";
-                    break;
+                    return "Measure";
                 default:
-                    break;
+                    return string.Empty;
             }
-            return desc;
         }
         private string SetClosedLoopVentilationDescription(short value)
         {
-            var desc = string.Empty;
-
             switch (value)
             {
                 case 0:
-                    desc = "Deactivated";
-                    break;
+                    return "Deactivated";
                 case 1:
-                    desc = "Activated";
-                    break;
+                    return "Activated";
                 default:
-                    break;
+                    return string.Empty;
             }
-            return desc;
         }
         private string SetRebreathingModeDescription(short value)
         {
-            var desc = string.Empty;
-
             switch (value)
             {
                 case 0:
-                    desc = "Closed";
-                    break;
+                    return "Closed";
                 case 1:
-                    desc = "Open";
-                    break;
+                    return "Open";
                 case 2:
-                    desc = "Semi Open";
-                    break;
+                    return "Semi Open";
                 case 3:
-                    desc = "Semi Closed";
-                    break;
+                    return "Semi Closed";
                 default:
-                    break;
+                    return string.Empty; 
             }
-            return desc;
         }
 
         #endregion

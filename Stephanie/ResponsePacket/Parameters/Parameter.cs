@@ -90,6 +90,22 @@ namespace Stephanie
         : this(byData[startIndex], BitConverter.ToInt16(byData, startIndex + 1))
         { }
 
+        public Parameter(byte id, byte[] byteId)
+        {
+            ParameterInfo oParamInfo;
+
+            // Making sure the id is recognized
+            if (!ParamInfoList.ContainsKey(id))
+            {
+                throw new InvalidParameterIDException(id);
+            }
+
+            oParamInfo = ParamInfoList[id];
+            m_Name = oParamInfo.Name;
+            m_Description = oParamInfo.Description;
+            m_Divider = oParamInfo.Divider;
+            m_IsValid = AssignAndValidateStringValue(Encoding.UTF8.GetString(byteId));
+        }
         public Parameter(byte id, Int16 value)
         {
             ParameterInfo oParamInfo;
@@ -107,11 +123,14 @@ namespace Stephanie
             m_IsValid = AssignAndValidateValue(value);
         }
 
+        virtual protected bool AssignAndValidateStringValue(string value) { return false; } 
+        abstract protected bool AssignAndValidateValue(Int16 value);
+
+
         #endregion
 
         #region Functions
 
-        abstract protected bool AssignAndValidateValue(Int16 value);
 
         #endregion
     }
