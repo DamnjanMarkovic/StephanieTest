@@ -123,6 +123,7 @@ namespace Stephanie
             m_IsValid = AssignAndValidateValue(value);
         }
 
+        //Added for string values asignment (Get8 & GetD)
         virtual protected bool AssignAndValidateStringValue(string value) { return false; } 
         abstract protected bool AssignAndValidateValue(Int16 value);
 

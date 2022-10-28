@@ -215,31 +215,31 @@ namespace Stephanie
             List<Parameter> oParamList = new List<Parameter>();
 
             // add data values retrieved from the device
-            //oParamList.AddRange(ProcessData());
+            oParamList.AddRange(ProcessData());
             // +++ currently not using alarm cause of documentation-reality mismatch!!!
             // add alarms data retrieved from the device
             //oParamList.AddRange(ProcessAlarms());
             // add settings values retrieved from the device
-            //oParamList.AddRange(ProcessSettings());
+            oParamList.AddRange(ProcessSettings());
 
 
             // add Device settings values retrieved from the device
-            //oParamList.AddRange(ProcessDeviceSettings());
+            oParamList.AddRange(ProcessDeviceSettings());
 
             // add Breathing Gas settings values retrieved from the device
-            //oParamList.AddRange(ProcessBreathingGasSettings());
+            oParamList.AddRange(ProcessBreathingGasSettings());
 
             // add Breathing Gas Measured Values values retrieved from the device
-            //oParamList.AddRange(ProcessBreathingGasMeasuredValues());
+            oParamList.AddRange(ProcessBreathingGasMeasuredValues());
 
             // add Blood Gas Measured Values values retrieved from the device
-            //oParamList.AddRange(ProcessBloodGasMeasuredValues());
+            oParamList.AddRange(ProcessBloodGasMeasuredValues());
 
             // add Device Information values retrieved from the device
-            //oParamList.AddRange(ProcessDeviceInformation());
+            oParamList.AddRange(ProcessDeviceInformation());
 
             // add SpO2 Controller Values retrieved from the device
-            //oParamList.AddRange(ProcessSpO2ControllerValues());
+            oParamList.AddRange(ProcessSpO2ControllerValues());
 
             // add SpO2 Controller Values retrieved from the device
             oParamList.AddRange(VentilationModeAsTextValues());
@@ -247,6 +247,12 @@ namespace Stephanie
             // write all data to the lazy writer
             WriteToLazyWriter(oParamList);
         }
+
+
+        //  Description:    Communicates with the device to get data values and then parses it.
+        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
+
+
         //  Ventilation Mode As Text Values
         private IEnumerable<Parameter> VentilationModeAsTextValues()
         {
@@ -259,11 +265,6 @@ namespace Stephanie
             // Returning the data as a list of parameters (parsed)
             return oVentilationModeAsTextResponsePacket.GetParsedData();
         }
-
-
-
-        //  Description:    Communicates with the device to get data values and then parses it.
-        //  Output:         List of parameters which represents the parsed data extracted from the data received from the device.
 
         //  SpO2 Controller Values
         private IEnumerable<Parameter> ProcessSpO2ControllerValues()
