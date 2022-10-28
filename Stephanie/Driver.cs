@@ -239,10 +239,25 @@ namespace Stephanie
             //oParamList.AddRange(ProcessDeviceInformation());
 
             // add SpO2 Controller Values retrieved from the device
-            oParamList.AddRange(ProcessSpO2ControllerValues());
+            //oParamList.AddRange(ProcessSpO2ControllerValues());
+
+            // add SpO2 Controller Values retrieved from the device
+            oParamList.AddRange(VentilationModeAsTextValues());
 
             // write all data to the lazy writer
             WriteToLazyWriter(oParamList);
+        }
+        //  Ventilation Mode As Text Values
+        private IEnumerable<Parameter> VentilationModeAsTextValues()
+        {
+            // Create a request packet and send it to the device
+            var byData = GetRawDataFromDevice(new VentilationModeAsTextRequestPacket());
+
+            // Create a response packet from the data arrived from the device
+            var oVentilationModeAsTextResponsePacket = new VentilationModeAsTextResponsePacket(byData);
+
+            // Returning the data as a list of parameters (parsed)
+            return oVentilationModeAsTextResponsePacket.GetParsedData();
         }
 
 
@@ -581,6 +596,23 @@ namespace Stephanie
                     };
                 byBuffer = response;
             }
+            else if (oRequestPacket.m_RequestCommand == "GETD")
+            {
+                byte[] response =
+                    {                            
+                            0x00, 0x00, 0x1E, 0x44,
+                            //  Example: 'PC-CMV + PRVC + PSV + TC + BU' (Length is 29)
+                            0x50, 0x43, 0x2d, 0x43, 0x4d, 0x56, 0x20, 0x2b, 0x20, 0x50, 
+                            0x52, 0x56, 0x43, 0x20, 0x2b, 0x20, 0x50, 0x53, 0x56, 0x20, 
+                            0x2b, 0x20, 0x54, 0x43, 0x20, 0x2b, 0x20, 0x42, 0x55,
+                            0xE7, 0x6C
+                    };
+                byBuffer = response;
+            }
+
+
+
+
             //HelperObject.DebugTrace("Sending: " + Encoding.ASCII.GetString(byBuffer));
 
             o = byBuffer;
