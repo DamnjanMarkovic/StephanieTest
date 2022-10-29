@@ -32,7 +32,6 @@ namespace Stephanie
             //added for testing on the machine
 #if DEBUG
             Debug.WriteLine($"VentilationModeAsTextResponsePacket; Data as byte array: {TestHelper.PrintByteArray(Data)}");
-            Debug.WriteLine($"VentilationModeAsTextResponsePacket; Data as string: {Encoding.UTF8.GetString(Data)}");
 #endif
 
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -244,6 +245,15 @@ namespace Stephanie
             // add SpO2 Controller Values retrieved from the device
             oParamList.AddRange(VentilationModeAsTextValues());
 
+            //for testing: 
+#if DEBUG
+            foreach (Parameter oParam in oParamList)
+            {
+                Debug.WriteLine($"Param Name: {oParam.Name}, Param Value: {oParam.Value} Param Desc: {oParam.Description}");
+            }
+#endif
+
+
             // write all data to the lazy writer
             WriteToLazyWriter(oParamList);
         }
@@ -386,7 +396,6 @@ namespace Stephanie
         //  Input:          List of parameters to be written to the lazy writer
         protected void WriteToLazyWriter(List<Parameter> oParamList)
         {
-
             // issue 107035.2 => Data enters in stand-by mode
             if (IsInStandByMode(oParamList))
             {
