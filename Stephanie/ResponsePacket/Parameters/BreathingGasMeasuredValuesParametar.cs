@@ -18,9 +18,13 @@ namespace Stephanie
             #endregion
 
             protected override bool AssignAndValidateValue(short value)
-            {
-                // Calculating the real value for this parameter
-                m_Value = ((float)value / m_Divider).ToString();
+        {
+            //added for testing on the machine
+#if DEBUG
+            Console.WriteLine($"BreathingGasMeasuredValuesParametar; Value: {value}");
+#endif
+            // Calculating the real value for this parameter
+            m_Value = ((float)value / m_Divider).ToString();
                 return true;
             }
         }

@@ -23,8 +23,12 @@ namespace Stephanie
 
             protected override bool AssignAndValidateStringValue(string value)
             {
-                //  Set Description, using Name and PDF values:
-                this.m_Description = value;
+            //added for testing on the machine
+#if DEBUG
+            Console.WriteLine($"VentilationModeAsTextParametar; Value: {value}");
+#endif
+            //  Set Description, using Name and PDF values:
+            this.m_Description = value;
 
                 // Set Value for this parameter
                 m_Value = value;
@@ -32,9 +36,13 @@ namespace Stephanie
             }
 
             protected override bool AssignAndValidateValue(short value)
-            {
-                // Calculating the real value for this parameter
-                m_Value = ((float)value / m_Divider).ToString();
+        {
+            //added for testing on the machine
+#if DEBUG
+            Console.WriteLine($"VentilationModeAsTextParametar; short Value: {value}");
+#endif
+            // Calculating the real value for this parameter
+            m_Value = ((float)value / m_Divider).ToString();
                 return true;
             }
         }

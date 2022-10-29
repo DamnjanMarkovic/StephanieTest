@@ -1,6 +1,8 @@
 ﻿
+using Stephanie.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Stephanie
@@ -27,7 +29,14 @@ namespace Stephanie
 
             public override List<Parameter> GetParsedData()
             {
-                List<Parameter> oParamList = new List<Parameter>();
+            //added for testing on the machine
+#if DEBUG
+            Debug.WriteLine($"VentilationModeAsTextResponsePacket; Data as byte array: {TestHelper.PrintByteArray(Data)}");
+            Debug.WriteLine($"VentilationModeAsTextResponsePacket; Data as string: {Encoding.UTF8.GetString(Data)}");
+#endif
+
+
+            List<Parameter> oParamList = new List<Parameter>();
                 oParamList.Add(new VentilationModeAsTextParametar(255, Data));            
                 return oParamList;
             }
